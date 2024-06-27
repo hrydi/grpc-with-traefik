@@ -1,0 +1,18 @@
+## Generate gRPC Code
+
+Execute this command
+```bash
+python -m grpc_tools.protoc -Igrpc_server/generated=./grpc_server/protofiles --python_out=. --pyi_out=. --grpc_p
+ython_out=. ./grpc_server/protofiles/ping.proto
+```
+
+## Running Server
+```bash
+docker-compose up --build -d
+```
+
+## Send Message From Client
+From directory client, execute this:
+```bash
+node run.js
+```
