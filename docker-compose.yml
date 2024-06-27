@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  grpc_server:
+    container_name: grpc_server
+    restart: unless-stopped
+    build:
+      context: .
+      target: 'base-non-root'
+      args:
+        host: ${HOST}
+        port: ${PORT}
+    user: "app:app"
+    networks:
+      - traefik-public
+    command: "python -m grpc_server.run"
+    volumes:
+      - ${PWD}/backend:/home/app/api
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.backend=grpc_server
+      - traefik.frontend.rule=Host:grpc.web.local
+      - traefik.port=${PORT}
+      - traefik.protocol=h2c
+
+networks:
+  traefik-public:
+    external : true
